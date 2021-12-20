@@ -1,0 +1,24 @@
+#loginContainer{
+    display: flex;
+    border-radius: 10px;
+    background-color: turquoise;
+    max-width: 250px;
+    padding: 10px 0px 10px 20px;
+    margin-top: 250px;
+    box-shadow: 10px 5px 5px rgb(180, 179, 179);
+
+    animation-duration: 3s;
+    animation-name: slidein;
+}
+
+@keyframes slidein {
+    from {
+      margin-left: 100%;
+      width: 300%;
+    }
+  
+    to {
+      margin-left: 643px;
+      width: 100%;
+    }
+  }

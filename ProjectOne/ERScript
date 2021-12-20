@@ -1,0 +1,77 @@
+CREATE TABLE reimbursement_status (
+	reimb_status_id serial PRIMARY KEY,
+	reimb_status varchar(10) NOT NULL
+);
+
+CREATE TABLE reimbursement_type (
+	reimb_type_id serial PRIMARY KEY,
+	reimb_type varchar(10) NOT NULL
+);
+
+CREATE TABLE user_roles (
+	ers_user_role_id serial PRIMARY KEY,
+	user_role varchar(20) NOT NULL
+);
+
+CREATE TABLE users (
+	ers_users_id serial PRIMARY KEY,
+	ers_username varchar(50) UNIQUE NOT NULL,
+	ers_password varchar(50) NOT NULL,
+	user_first_name varchar(100) NOT NULL,
+	user_last_name varchar(100) NOT NULL,
+	user_email varchar(150) UNIQUE NOT NULL,
+	user_role_id int NOT NULL,
+	FOREIGN KEY (user_role_id) REFERENCES user_roles(ers_user_role_id) ON DELETE CASCADE
+);
+
+CREATE TABLE reimbursement (
+	reimb_id serial PRIMARY KEY,
+	reimb_amount decimal(10, 2) NOT NULL,
+	reimb_submitted timestamp DEFAULT now() NOT NULL,
+	reimb_resolved timestamp,
+	reimb_description varchar(250),
+	reimb_reciept bytea,
+	reimb_author int NOT NULL,
+	reimb_resolver int,
+	reimb_status_id int NOT NULL,
+	reimb_type_id int NOT NULL,
+	FOREIGN KEY (reimb_author) REFERENCES user_roles(ers_user_role_id) ON DELETE CASCADE,
+	FOREIGN KEY (reimb_resolver) REFERENCES user_roles(ers_user_role_id) ON DELETE CASCADE,
+	FOREIGN KEY (reimb_status_id) REFERENCES reimbursement_status(reimb_status_id) ON DELETE CASCADE,
+	FOREIGN KEY (reimb_type_id) REFERENCES reimbursement_type(reimb_type_id) ON DELETE CASCADE
+);
+
+INSERT INTO reimbursement_status VALUES 
+(DEFAULT, 'Approved'),
+(DEFAULT, 'Pending'),
+(DEFAULT, 'Denied');
+
+INSERT INTO reimbursement_type VALUES 
+(DEFAULT, 'LODGING'),
+(DEFAULT, 'TRAVEL'),
+(DEFAULT, 'FOOD'),
+(DEFAULT, 'OTHER');
+
+INSERT INTO user_roles VALUES 
+(DEFAULT, 'Employee'),
+(DEFAULT, 'Financial Manager');
+
+INSERT INTO users VALUES 
+(DEFAULT, 'stinkydragon', 'p4ssw0rd', 'David', 'Helfer', 'david.helfer@gmail.com', 1),
+(DEFAULT, 'bluejeans', 'bigjeans', 'Susanna', 'Jacobson', 'susanna.jacobson@gmail.com', 2);
+
+
+INSERT INTO reimbursement VALUES 
+(DEFAULT, 1500.56, DEFAULT, NULL, 'Marriot Hotel', NULL, 1, NULL, 2, 1),
+(DEFAULT, 65.00, DEFAULT, NULL, 'Lakewood Steakhouse', NULL, 1, NULL, 2, 3);
+
+SELECT * FROM users;
+SELECT * FROM reimbursement;
+
+UPDATE 
+
+DROP TABLE reimbursement;
+DROP TABLE users;
+DROP TABLE reimbursement_status;
+DROP TABLE reimbursement_type;
+DROP TABLE user_roles;
